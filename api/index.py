@@ -1,21 +1,22 @@
+import json
 import os
 import smtplib
 from datetime import datetime, timezone, timedelta
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from typing import Optional
+import urllib.request
+import urllib.parse
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-# 로컬 환경 .env 로드 (Vercel 배포 시에는 Vercel의 Environment Variables가 우선)
 load_dotenv()
 
-app = FastAPI(title="Motorcycle Inquiry API")
+app = FastAPI(title="Motorcycle Inquiry API with Supabase")
 
-# CORS 허용 설정
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -31,41 +32,142 @@ class InquiryRequest(BaseModel):
     region: str = Field(...)
     brand: str = Field(...)
     model: str = Field(..., min_length=1, max_length=100)
-    condition: str = Field(...)  # 신차, 중고차, 무관
-    payment_method: str = Field(...)  # 현금 일시불, 카드 할부, 파이낸셜/캐피탈
-    trade_in: str = Field(...)  # 대차 없음, 대차 희망
+    condition: str = Field(...)
+    payment_method: str = Field(...)
+    trade_in: str = Field(...)
     trade_in_model: Optional[str] = None
-    urgency: str = Field(...)  # 즉시 출고, 1~2주 이내, 1개월 이내, 시세 확인
-    delivery_method: str = Field(...)  # 매장 방문, 전국 탁송
-    contact_time: str = Field(...)  # 언제든 가능, 오전, 오후, 저녁, 문자/카톡 우선
+    urgency: str = Field(...)
+    delivery_method: str = Field(...)
+    contact_time: str = Field(...)
     message: Optional[str] = None
-    bot_honey: Optional[str] = None  # 스팸 봇 방지용 Honeypot 필드
+    bot_honey: Optional[str] = None
 
 
+class StatusUpdateRequest(BaseModel):
+    status: str
+    memo: Optional[str] = None
+
+
+class AdminLoginRequest(BaseModel):
+    password: str
+
+
+# --- Supabase REST 헬퍼 함수 ---
+def get_supabase_config():
+    url = os.getenv("SUPABASE_URL")
+    key = os.getenv("SUPABASE_KEY")
+    return url, key
+
+
+def save_to_supabase(data: InquiryRequest):
+    url, key = get_supabase_config()
+    if not url or not key:
+        print("[WARN] Supabase 설정이 없어 DB 저장을 건너뜁니다.")
+        return None
+
+    endpoint = f"{url.rstrip('/')}/rest/v1/inquiries"
+    payload = {
+        "name": data.name,
+        "phone": data.phone,
+        "region": data.region,
+        "brand": data.brand,
+        "model": data.model,
+        "condition": data.condition,
+        "payment_method": data.payment_method,
+        "trade_in": data.trade_in,
+        "trade_in_model": data.trade_in_model or "",
+        "urgency": data.urgency,
+        "delivery_method": data.delivery_method,
+        "contact_time": data.contact_time,
+        "message": data.message or "",
+        "status": "신규접수"
+    }
+
+    req = urllib.request.Request(
+        endpoint,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "apikey": key,
+            "Authorization": f"Bearer {key}",
+            "Content-Type": "application/json",
+            "Prefer": "return=representation"
+        },
+        method="POST"
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            return json.loads(resp.read().decode("utf-8"))
+    except Exception as e:
+        print(f"[ERROR] Supabase DB 저장 실패: {e}")
+        return None
+
+
+def fetch_inquiries_from_supabase():
+    url, key = get_supabase_config()
+    if not url or not key:
+        raise HTTPException(status_code=500, detail="Supabase 설정이 구성되지 않았습니다.")
+
+    endpoint = f"{url.rstrip('/')}/rest/v1/inquiries?select=*&order=created_at.desc"
+    req = urllib.request.Request(
+        endpoint,
+        headers={
+            "apikey": key,
+            "Authorization": f"Bearer {key}",
+            "Content-Type": "application/json"
+        },
+        method="GET"
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            return json.loads(resp.read().decode("utf-8"))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"DB 조회 실패: {str(e)}")
+
+
+def update_inquiry_in_supabase(inquiry_id: int, status: str, memo: Optional[str] = None):
+    url, key = get_supabase_config()
+    if not url or not key:
+        raise HTTPException(status_code=500, detail="Supabase 설정이 구성되지 않았습니다.")
+
+    endpoint = f"{url.rstrip('/')}/rest/v1/inquiries?id=eq.{inquiry_id}"
+    payload = {"status": status}
+    if memo is not None:
+        payload["memo"] = memo
+
+    req = urllib.request.Request(
+        endpoint,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "apikey": key,
+            "Authorization": f"Bearer {key}",
+            "Content-Type": "application/json"
+        },
+        method="PATCH"
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            return True
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"상태 업데이트 실패: {str(e)}")
+
+
+# --- Gmail 발송 함수 ---
 def send_inquiry_email(data: InquiryRequest):
     gmail_user = os.getenv("GMAIL_USER") or os.getenv("GMAIL_ADDRESS")
     gmail_pass = os.getenv("GMAIL_APP_PASSWORD")
 
     if not gmail_user or not gmail_pass:
-        raise HTTPException(
-            status_code=500,
-            detail="이메일 설정(GMAIL_USER 또는 GMAIL_APP_PASSWORD)이 누락되었습니다."
-        )
+        return  # 이메일 설정 누락 시 조용히 스킵
 
-    # 공백 제거 처리 (앱 비밀번호는 16자리 문자열)
     clean_pass = gmail_pass.replace(" ", "").strip()
     clean_user = gmail_user.strip()
 
-    # 한국 시간(KST) 생성
     kst = timezone(timedelta(hours=9))
     now_kst = datetime.now(kst).strftime("%Y-%m-%d %H:%M:%S")
 
-    # 긴급도 강조 텍스트
     urgency_badge = "🔥 [즉시출고 희망]" if "즉시" in data.urgency else f"[{data.urgency}]"
-
     subject = f"[바이크 구매문의] {data.name} 고객님 - {data.brand} {data.model} {urgency_badge}"
 
-    # HTML 메일 템플릿
     html_content = f"""
     <!DOCTYPE html>
     <html>
@@ -153,28 +255,57 @@ def send_inquiry_email(data: InquiryRequest):
             server.ehlo()
             server.login(clean_user, clean_pass)
             server.sendmail(clean_user, clean_user, msg.as_string())
-    except smtplib.SMTPAuthenticationError:
-        raise HTTPException(
-            status_code=500,
-            detail="Gmail 인증에 실패했습니다. 이메일 주소 및 16자리 앱 비밀번호를 확인해 주세요."
-        )
     except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"이메일 발송 중 오류가 발생했습니다: {str(e)}"
-        )
+        print(f"[WARN] 이메일 발송 실패 (DB 저장은 유지): {e}")
 
 
+# --- 엔드포인트 정의 ---
 @app.get("/api/health")
 def health_check():
-    return {"status": "ok", "message": "Inquiry API is running"}
+    return {"status": "ok", "message": "API with Supabase is running"}
 
 
 @app.post("/api/inquiry")
 def submit_inquiry(req: InquiryRequest):
-    # 스팸 봇 필터링: 사용자에게 안 보이는 honeypot 필드에 값이 채워진 경우
     if req.bot_honey:
         return {"status": "success", "message": "접수되었습니다."}
 
+    # 1. Supabase DB 저장
+    save_to_supabase(req)
+
+    # 2. Gmail 알림 전송
     send_inquiry_email(req)
+
     return {"status": "success", "message": "구매 문의가 성공적으로 접수되었습니다. 신속히 안내 연락드리겠습니다!"}
+
+
+# --- 관리자 기능 엔드포인트 ---
+def verify_admin_auth(auth_token: Optional[str] = Header(None, alias="X-Admin-Token")):
+    admin_pw = os.getenv("ADMIN_PASSWORD", "admin1234")
+    if not auth_token or auth_token != admin_pw:
+        raise HTTPException(status_code=401, detail="관리자 인증에 실패했습니다.")
+
+
+@app.post("/api/admin/login")
+def admin_login(req: AdminLoginRequest):
+    admin_pw = os.getenv("ADMIN_PASSWORD", "admin1234")
+    if req.password == admin_pw:
+        return {"status": "success", "token": admin_pw}
+    raise HTTPException(status_code=401, detail="비밀번호가 올바르지 않습니다.")
+
+
+@app.get("/api/admin/inquiries")
+def get_inquiries(x_admin_token: Optional[str] = Header(None, alias="X-Admin-Token")):
+    verify_admin_auth(x_admin_token)
+    return fetch_inquiries_from_supabase()
+
+
+@app.patch("/api/admin/inquiries/{inquiry_id}")
+def update_inquiry_status(
+    inquiry_id: int,
+    req: StatusUpdateRequest,
+    x_admin_token: Optional[str] = Header(None, alias="X-Admin-Token")
+):
+    verify_admin_auth(x_admin_token)
+    update_inquiry_in_supabase(inquiry_id, req.status, req.memo)
+    return {"status": "success", "message": "상태가 변경되었습니다."}
