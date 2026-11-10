@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>프리미엄 모터사이클 즉시 출고 & 구매 견적 문의</title>
+  <title>프리미엄 모터사이클 즉시 출고 & 구매 견적 문의 | MOTO DIRECT</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -23,14 +23,17 @@
 <body class="bg-slate-900 text-slate-100 min-h-screen">
 
   <!-- 네비게이션 / 상단바 -->
-  <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
-    <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
-      <div class="flex items-center space-x-2">
+  <header class="border-b border-slate-800 bg-slate-950/85 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center space-x-2 hover:opacity-80 transition">
         <i class="fa-solid fa-motorcycle text-sky-400 text-2xl"></i>
         <span class="font-extrabold text-lg md:text-xl tracking-tight text-white">MOTO DIRECT</span>
-      </div>
-      <div class="flex items-center space-x-2">
-        <a href="/login.html" class="text-xs text-slate-400 hover:text-white px-3 py-2 rounded-lg transition mr-1">
+      </a>
+      <div class="flex items-center space-x-3">
+        <a href="#lineup" class="hidden sm:inline-block text-xs text-slate-300 hover:text-sky-400 px-2 py-1 transition font-medium">
+          인기 출고 모델
+        </a>
+        <a href="/login.html" class="text-xs text-slate-400 hover:text-white px-3 py-2 rounded-lg border border-slate-800 hover:border-slate-700 transition">
           <i class="fa-solid fa-user-shield mr-1"></i>관리자
         </a>
         <a href="#inquiry-form" class="bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-4 py-2 rounded-lg text-sm transition shadow-lg shadow-sky-500/20">
@@ -40,26 +43,44 @@
     </div>
   </header>
 
-  <!-- 히어로 섹션 -->
-  <section class="relative py-16 md:py-24 px-4 overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-900">
-    <div class="max-w-4xl mx-auto text-center space-y-6">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-sky-950/80 border border-sky-500/30 text-sky-400 text-xs md:text-sm font-semibold">
+  <!-- 히어로 섹션 (고화질 바이크 배경 이미지 적용) -->
+  <section class="relative py-20 md:py-28 px-4 overflow-hidden">
+    <!-- 배경 이미지 & 오버레이 -->
+    <div class="absolute inset-0 z-0">
+      <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1920&q=85" 
+           alt="프리미엄 모터사이클 배경" 
+           class="w-full h-full object-cover object-center opacity-35 scale-105">
+      <div class="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-900/75 to-slate-900"></div>
+    </div>
+
+    <div class="relative z-10 max-w-4xl mx-auto text-center space-y-6">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-950/90 border border-sky-500/40 text-sky-400 text-xs md:text-sm font-semibold shadow-lg">
         <span class="flex h-2 w-2 rounded-full bg-sky-400 animate-ping"></span>
-        전국 최저가 견적 & 즉시 출고 상담 진행 중
+        전국 최저가 견적 & 당일/익일 즉시 출고 상담 진행 중
       </div>
-      <h1 class="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-white">
+      <h1 class="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-white drop-shadow-md">
         원하는 바이크를 <br class="hidden sm:inline">
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-500">가장 빠르고 합리적인 견적</span>으로
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-400">가장 빠르고 합리적인 견적</span>으로
       </h1>
-      <p class="text-slate-400 text-sm md:text-lg max-w-2xl mx-auto leading-relaxed">
-        혼다, 야마하, 스즈키, BMW 등 전 브랜드 신차/중고차 재고 실시간 확인.<br class="hidden sm:inline">
-        카드 무이자 할부부터 대차 지원, 전국 안전 탁송까지 1:1 맞춤 출고를 도와드립니다.
+      <p class="text-slate-300 text-sm md:text-lg max-w-2xl mx-auto leading-relaxed">
+        혼다, 야마하, 스즈키, BMW 등 전 브랜드 신차/중고차 재고 실시간 매칭.<br class="hidden sm:inline">
+        카드 무이자 할부부터 대차 최고가 매입, 전국 안전 탁송까지 1:1 맞춤 출고를 도와드립니다.
       </p>
 
+      <div class="pt-2 flex flex-wrap justify-center gap-3">
+        <a href="#inquiry-form" class="bg-sky-500 hover:bg-sky-400 text-slate-950 font-extrabold px-7 py-3.5 rounded-xl text-sm md:text-base transition shadow-xl shadow-sky-500/30 flex items-center gap-2">
+          <span>실시간 재고 & 최저가 견적 받기</span>
+          <i class="fa-solid fa-chevron-right text-xs"></i>
+        </a>
+        <a href="#lineup" class="bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-white font-semibold px-6 py-3.5 rounded-xl text-sm md:text-base transition backdrop-blur">
+          인기 바이크 라인업 보기
+        </a>
+      </div>
+
       <!-- 핵심 포인트 3가지 -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 text-left">
-        <div class="bg-slate-800/60 border border-slate-700/60 p-4 rounded-xl flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-lg bg-sky-500/10 text-sky-400 flex items-center justify-center text-lg font-bold shrink-0">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-8 text-left">
+        <div class="bg-slate-900/80 backdrop-blur border border-slate-700/70 p-4 rounded-xl flex items-center space-x-3 shadow-lg">
+          <div class="w-11 h-11 rounded-lg bg-sky-500/15 text-sky-400 flex items-center justify-center text-lg font-bold shrink-0">
             <i class="fa-solid fa-bolt"></i>
           </div>
           <div>
@@ -67,22 +88,84 @@
             <p class="text-xs text-slate-400">대기 없이 즉시 출고 가능한 실재고 매칭</p>
           </div>
         </div>
-        <div class="bg-slate-800/60 border border-slate-700/60 p-4 rounded-xl flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-lg bg-sky-500/10 text-sky-400 flex items-center justify-center text-lg font-bold shrink-0">
+        <div class="bg-slate-900/80 backdrop-blur border border-slate-700/70 p-4 rounded-xl flex items-center space-x-3 shadow-lg">
+          <div class="w-11 h-11 rounded-lg bg-sky-500/15 text-sky-400 flex items-center justify-center text-lg font-bold shrink-0">
             <i class="fa-solid fa-credit-card"></i>
           </div>
           <div>
             <h4 class="font-bold text-sm text-white">맞춤형 결제 솔루션</h4>
-            <p class="text-xs text-slate-400">최대 무이자 할부 및 캐피탈 최저 금리</p>
+            <p class="text-xs text-slate-400">카드 무이자 할부 및 캐피탈 최저 금리</p>
           </div>
         </div>
-        <div class="bg-slate-800/60 border border-slate-700/60 p-4 rounded-xl flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-lg bg-sky-500/10 text-sky-400 flex items-center justify-center text-lg font-bold shrink-0">
+        <div class="bg-slate-900/80 backdrop-blur border border-slate-700/70 p-4 rounded-xl flex items-center space-x-3 shadow-lg">
+          <div class="w-11 h-11 rounded-lg bg-sky-500/15 text-sky-400 flex items-center justify-center text-lg font-bold shrink-0">
             <i class="fa-solid fa-truck"></i>
           </div>
           <div>
             <h4 class="font-bold text-sm text-white">전국 안전 직배송</h4>
-            <p class="text-xs text-slate-400">전문 기사 배차로 집 앞까지 파손 없는 탁송</p>
+            <p class="text-xs text-slate-400">전문 리프트 기사 배차로 집 앞까지 탁송</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 브랜드별 인기 출고 바이크 갤러리 섹션 -->
+  <section id="lineup" class="py-12 md:py-16 px-4 max-w-6xl mx-auto">
+    <div class="text-center mb-10 space-y-2">
+      <span class="text-xs font-bold tracking-wider uppercase text-sky-400">BEST MOTORCYCLE LINEUP</span>
+      <h2 class="text-2xl md:text-3xl font-extrabold text-white">지금 가장 인기 있는 즉시 출고 모델</h2>
+      <p class="text-xs md:text-sm text-slate-400">원하시는 모델을 클릭하면 아래 견적 문의 폼에 자동으로 차종이 선택됩니다.</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- 카드 1: 혼다 -->
+      <div onclick="quickSelectBike('혼다(Honda)', '포르자 350')" class="group cursor-pointer bg-slate-950 border border-slate-800 hover:border-sky-500/60 rounded-2xl overflow-hidden transition duration-300 shadow-lg">
+        <div class="relative h-48 overflow-hidden bg-slate-900">
+          <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=800&q=80" alt="혼다 바이크" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+          <span class="absolute top-3 left-3 bg-red-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow">인기 1위 · 즉시출고</span>
+          <span class="absolute bottom-3 right-3 bg-slate-950/80 backdrop-blur text-sky-400 text-xs font-semibold px-2.5 py-1 rounded-lg border border-slate-700">혼다 (Honda)</span>
+        </div>
+        <div class="p-5">
+          <h3 class="text-lg font-bold text-white group-hover:text-sky-400 transition">혼다 포르자 350 / PCX 125</h3>
+          <p class="text-xs text-slate-400 mt-1">쿼터급/엔트리 스쿠터 부동의 1위. 출퇴근부터 투어링까지 완벽한 올라운더</p>
+          <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+            <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check mr-1"></i>신차/중고 재고보유</span>
+            <span class="text-sky-400 font-bold">이 모델 견적 문의 →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 카드 2: 야마하 -->
+      <div onclick="quickSelectBike('야마하(Yamaha)', 'YZF-R3')" class="group cursor-pointer bg-slate-950 border border-slate-800 hover:border-sky-500/60 rounded-2xl overflow-hidden transition duration-300 shadow-lg">
+        <div class="relative h-48 overflow-hidden bg-slate-900">
+          <img src="https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?auto=format&fit=crop&w=800&q=80" alt="야마하 스포츠 바이크" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+          <span class="absolute top-3 left-3 bg-sky-500 text-slate-950 text-[11px] font-bold px-2.5 py-1 rounded-full shadow">무이자 할부 지원</span>
+          <span class="absolute bottom-3 right-3 bg-slate-950/80 backdrop-blur text-sky-400 text-xs font-semibold px-2.5 py-1 rounded-lg border border-slate-700">야마하 (Yamaha)</span>
+        </div>
+        <div class="p-5">
+          <h3 class="text-lg font-bold text-white group-hover:text-sky-400 transition">야마하 YZF-R3 / XMAX 300</h3>
+          <p class="text-xs text-slate-400 mt-1">짜릿한 퍼포먼스의 쿼터급 레플리카 R3 및 프리미엄 빅스쿠터 XMAX</p>
+          <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+            <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check mr-1"></i>색상별 즉시출고</span>
+            <span class="text-sky-400 font-bold">이 모델 견적 문의 →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 카드 3: BMW / 가와사키 -->
+      <div onclick="quickSelectBike('BMW', 'S 1000 RR')" class="group cursor-pointer bg-slate-950 border border-slate-800 hover:border-sky-500/60 rounded-2xl overflow-hidden transition duration-300 shadow-lg">
+        <div class="relative h-48 overflow-hidden bg-slate-900">
+          <img src="https://images.unsplash.com/photo-1609630875171-b1321377ee65?auto=format&fit=crop&w=800&q=80" alt="BMW 투어러 & 슈퍼스포츠" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+          <span class="absolute top-3 left-3 bg-amber-500 text-slate-950 text-[11px] font-bold px-2.5 py-1 rounded-full shadow">대차 추가보상</span>
+          <span class="absolute bottom-3 right-3 bg-slate-950/80 backdrop-blur text-sky-400 text-xs font-semibold px-2.5 py-1 rounded-lg border border-slate-700">BMW / 가와사키</span>
+        </div>
+        <div class="p-5">
+          <h3 class="text-lg font-bold text-white group-hover:text-sky-400 transition">BMW S1000RR / C 400 GT</h3>
+          <p class="text-xs text-slate-400 mt-1">압도적인 기술력의 슈퍼스포츠 및 장거리 투어링 바이크 특별 프로모션</p>
+          <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+            <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check mr-1"></i>전국 안전 탁송</span>
+            <span class="text-sky-400 font-bold">이 모델 견적 문의 →</span>
           </div>
         </div>
       </div>
@@ -142,29 +225,50 @@
           </select>
         </div>
 
-        <!-- 3. 관심 차량 (브랜드 & 모델명) -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1.5">
-              제조사 브랜드 <span class="text-red-400">*</span>
-            </label>
-            <select id="brand" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-sky-500">
-              <option value="혼다(Honda)">혼다 (Honda)</option>
-              <option value="야마하(Yamaha)">야마하 (Yamaha)</option>
-              <option value="스즈키(Suzuki)">스즈키 (Suzuki)</option>
-              <option value="가와사키(Kawasaki)">가와사키 (Kawasaki)</option>
-              <option value="BMW">BMW Motorrad</option>
-              <option value="할리데이비슨">할리데이비슨</option>
-              <option value="베스파/피아지오">베스파 / 피아지오</option>
-              <option value="기타/직접입력">기타 브랜드</option>
-            </select>
+        <!-- 3. 관심 차량 (브랜드별 추천 5대 모델 드롭다운 + 직접입력 지원) -->
+        <div class="space-y-4 bg-slate-900/50 border border-slate-800/80 p-4 rounded-xl">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">
+                제조사 브랜드 <span class="text-red-400">*</span>
+              </label>
+              <select id="brand" onchange="updateModelDropdown()" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-sky-500">
+                <option value="혼다(Honda)">혼다 (Honda)</option>
+                <option value="야마하(Yamaha)">야마하 (Yamaha)</option>
+                <option value="스즈키(Suzuki)">스즈키 (Suzuki)</option>
+                <option value="가와사키(Kawasaki)">가와사키 (Kawasaki)</option>
+                <option value="BMW">BMW Motorrad</option>
+                <option value="할리데이비슨">할리데이비슨</option>
+                <option value="베스파/피아지오">베스파 / 피아지오</option>
+                <option value="기타/직접입력">기타 브랜드 (직접입력)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">
+                추천 인기 모델 선택 <span class="text-red-400">*</span>
+              </label>
+              <select id="model_select" onchange="toggleCustomModelInput()" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-sky-500">
+                <!-- 자바스크립트에서 브랜드별 추천 모델 5개 + 직접입력 자동 생성 -->
+              </select>
+            </div>
           </div>
+
+          <!-- 직접 입력창 (모델 드롭다운에서 '직접입력' 선택 시 노출) -->
+          <div id="customModelBox" class="hidden">
+            <label class="block text-xs font-semibold text-sky-400 mb-1.5">
+              희망 모델명 직접 입력 <span class="text-red-400">*</span>
+            </label>
+            <input type="text" id="model_custom" placeholder="원하시는 모델명과 색상을 입력해 주세요 (예: CBR650R 레드)"
+                   class="w-full bg-slate-950 border border-sky-500/50 rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-sky-500">
+          </div>
+
+          <!-- 희망 색상 입력 (선택) -->
           <div>
             <label class="block text-xs font-semibold text-slate-300 mb-1.5">
-              희망 모델명 & 색상 <span class="text-red-400">*</span>
+              희망 색상 (선택)
             </label>
-            <input type="text" id="model" required placeholder="예: 포르자 350 블랙 / 슈퍼커브"
-                   class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500">
+            <input type="text" id="model_color" placeholder="예: 매트 블랙, 화이트, 상관없음 등"
+                   class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3.5 py-2 text-sm text-white focus:outline-none focus:border-sky-500">
           </div>
         </div>
 
@@ -336,6 +440,84 @@
   </div>
 
   <script>
+    // 제조사별 추천 모델 5가지 데이터
+    const brandModels = {
+      "혼다(Honda)": ["PCX 125", "포르자 350", "슈퍼커브 110", "ADV 350", "포르자 750"],
+      "야마하(Yamaha)": ["NMAX 125", "XMAX 300", "YZF-R3", "MT-03", "티맥스(TMAX) 560"],
+      "스즈키(Suzuki)": ["버그만 125", "버그만 400", "GSX-R125", "V-Strom 250SX", "하야부사(Hayabusa)"],
+      "가와사키(Kawasaki)": ["닌자(Ninja) 400", "닌자(Ninja) 500", "Z400", "엘리미네이터 500", "닌자 ZX-6R"],
+      "BMW": ["C 400 X", "C 400 GT", "G 310 R", "S 1000 RR", "R 1300 GS"],
+      "할리데이비슨": ["스포스터 S", "아이언 883", "팻보이 114", "브레이크아웃 117", "스트리트 글라이드"],
+      "베스파/피아지오": ["프리마베라 125", "스프린트 125", "GTS 300 슈퍼테크", "GTV 300", "메들리 125"],
+      "기타/직접입력": []
+    };
+
+    function updateModelDropdown() {
+      const brand = document.getElementById('brand').value;
+      const modelSelect = document.getElementById('model_select');
+      const models = brandModels[brand] || [];
+
+      modelSelect.innerHTML = '';
+
+      if (models.length > 0) {
+        models.forEach((m, idx) => {
+          const opt = document.createElement('option');
+          opt.value = m;
+          opt.textContent = m;
+          if (idx === 0) opt.selected = true;
+          modelSelect.appendChild(opt);
+        });
+      }
+
+      // 항상 마지막에 '직접입력' 옵션 추가
+      const customOpt = document.createElement('option');
+      customOpt.value = "직접입력";
+      customOpt.textContent = "직접 입력하기...";
+      if (models.length === 0) customOpt.selected = true;
+      modelSelect.appendChild(customOpt);
+
+      toggleCustomModelInput();
+    }
+
+    function toggleCustomModelInput() {
+      const modelSelectVal = document.getElementById('model_select').value;
+      const customBox = document.getElementById('customModelBox');
+      const customInput = document.getElementById('model_custom');
+
+      if (modelSelectVal === '직접입력') {
+        customBox.classList.remove('hidden');
+        customInput.required = true;
+      } else {
+        customBox.classList.add('hidden');
+        customInput.required = false;
+      }
+    }
+
+    // 상단 인기 카드 클릭 시 폼 자동 선택 및 스크롤 이동
+    function quickSelectBike(brandName, modelName) {
+      const brandSelect = document.getElementById('brand');
+      brandSelect.value = brandName;
+      updateModelDropdown();
+
+      const modelSelect = document.getElementById('model_select');
+      const exists = Array.from(modelSelect.options).some(opt => opt.value === modelName);
+      if (exists) {
+        modelSelect.value = modelName;
+        toggleCustomModelInput();
+      } else {
+        modelSelect.value = '직접입력';
+        toggleCustomModelInput();
+        document.getElementById('model_custom').value = modelName;
+      }
+
+      document.getElementById('inquiry-form').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // 페이지 최초 로드 시 모델 드롭다운 초기화
+    window.addEventListener('DOMContentLoaded', () => {
+      updateModelDropdown();
+    });
+
     // 전화번호 자동 하이픈 포맷
     const phoneInput = document.getElementById('phone');
     phoneInput.addEventListener('input', (e) => {
@@ -389,6 +571,21 @@
       const btnText = document.getElementById('btnText');
       const btnIcon = document.getElementById('btnIcon');
 
+      // 선택된 모델명 + 색상 조합
+      const selectedModel = document.getElementById('model_select').value;
+      const customModel = document.getElementById('model_custom').value.trim();
+      const color = document.getElementById('model_color').value.trim();
+
+      let finalModel = selectedModel === '직접입력' ? customModel : selectedModel;
+      if (color) {
+        finalModel += ` (${color})`;
+      }
+
+      if (!finalModel) {
+        showModal(false, "모델명 확인", "희망하시는 바이크 모델명을 선택하거나 입력해 주세요.");
+        return;
+      }
+
       // 로딩 상태 변환
       submitBtn.disabled = true;
       btnText.textContent = "견적 문의 전송 중...";
@@ -399,7 +596,7 @@
         phone: document.getElementById('phone').value.trim(),
         region: document.getElementById('region').value,
         brand: document.getElementById('brand').value,
-        model: document.getElementById('model').value.trim(),
+        model: finalModel,
         condition: document.querySelector('input[name="condition"]:checked').value,
         urgency: document.querySelector('input[name="urgency"]:checked').value,
         payment_method: document.getElementById('payment_method').value,
@@ -423,6 +620,7 @@
         if (res.ok) {
           showModal(true, "문의 접수가 완료되었습니다!", "요청하신 차량 견적과 재고 확인 후 담당자가 신속히 연락드리겠습니다.");
           document.getElementById('bikeInquiryForm').reset();
+          updateModelDropdown();
           toggleTradeInInput();
         } else {
           showModal(false, "전송 실패", data.detail || "일시적인 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
