@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>프리미엄 모터사이클 즉시 출고 & 구매 견적 문의</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+    body { font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; }
+    
+    /* 라디오 버튼 커스텀 스타일 */
+    .radio-pill input[type="radio"]:checked + label {
+      border-color: #0284c7;
+      background-color: #f0f9ff;
+      color: #0369a1;
+      font-weight: 700;
+      box-shadow: 0 0 0 1px #0284c7;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+
+  <!-- 네비게이션 / 상단바 -->
+  <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <i class="fa-solid fa-motorcycle text-sky-400 text-2xl"></i>
+        <span class="font-extrabold text-lg md:text-xl tracking-tight text-white">MOTO DIRECT</span>
+      </div>
+      <a href="#inquiry-form" class="bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-4 py-2 rounded-lg text-sm transition shadow-lg shadow-sky-500/20">
+        견적 문의하기
+      </a>
+    </div>
+  </header>
+
+  <!-- 히어로 섹션 -->
+  <section class="relative py-16 md:py-24 px-4 overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-900">
+    <div class="max-w-4xl mx-auto text-center space-y-6">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-sky-950/80 border border-sky-500/30 text-sky-400 text-xs md:text-sm font-semibold">
+        <span class="flex h-2 w-2 rounded-full bg-sky-400 animate-ping"></span>
+        전국 최저가 견적 & 즉시 출고 상담 진행 중
+      </div>
+      <h1 class="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-white">
+        원하는 바이크를 <br class="hidden sm:inline">
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-500">가장 빠르고 합리적인 견적</span>으로
+      </h1>
+      <p class="text-slate-400 text-sm md:text-lg max-w-2xl mx-auto leading-relaxed">
+        혼다, 야마하, 스즈키, BMW 등 전 브랜드 신차/중고차 재고 실시간 확인.<br class="hidden sm:inline">
+        카드 무이자 할부부터 대차 지원, 전국 안전 탁송까지 1:1 맞춤 출고를 도와드립니다.
+      </p>
+
+      <!-- 핵심 포인트 3가지 -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 text-left">
+        <div class="bg-slate-800/60 border border-slate-700/60 p-4 rounded-xl flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-lg bg-sky-500/10 text-sky-400 flex items-center justify-center text-lg font-bold shrink-0">
+            <i class="fa-solid fa-bolt"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-sm text-white">당일/익일 빠른 출고</h4>
+            <p class="text-xs text-slate-400">대기 없이 즉시 출고 가능한 실재고 매칭</p>
+          </div>
+        </div>
+        <div class="bg-slate-800/60 border border-slate-700/60 p-4 rounded-xl flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-lg bg-sky-500/10 text-sky-400 flex items-center justify-center text-lg font-bold shrink-0">
+            <i class="fa-solid fa-credit-card"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-sm text-white">맞춤형 결제 솔루션</h4>
+            <p class="text-xs text-slate-400">최대 무이자 할부 및 캐피탈 최저 금리</p>
+          </div>
+        </div>
+        <div class="bg-slate-800/60 border border-slate-700/60 p-4 rounded-xl flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-lg bg-sky-500/10 text-sky-400 flex items-center justify-center text-lg font-bold shrink-0">
+            <i class="fa-solid fa-truck"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-sm text-white">전국 안전 직배송</h4>
+            <p class="text-xs text-slate-400">전문 기사 배차로 집 앞까지 파손 없는 탁송</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 구매 문의 폼 섹션 -->
+  <section id="inquiry-form" class="py-12 md:py-16 px-4">
+    <div class="max-w-2xl mx-auto bg-slate-950 border border-slate-800 rounded-2xl p-6 sm:p-10 shadow-2xl relative">
+      
+      <div class="mb-8 text-center sm:text-left">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white flex items-center justify-center sm:justify-start gap-2">
+          <span>구매 및 견적 문의 접수</span>
+          <span class="text-xs bg-red-500/20 text-red-400 border border-red-500/30 px-2 py-0.5 rounded-full font-semibold">1:1 빠른 상담</span>
+        </h2>
+        <p class="text-sm text-slate-400 mt-2">
+          선택하신 조건에 맞춰 최적의 재고 상태와 상세 견적을 신속하게 안내해 드립니다.
+        </p>
+      </div>
+
+      <form id="bikeInquiryForm" class="space-y-6">
+        <!-- 봇 방지 Honeypot (사람에게는 안 보임) -->
+        <input type="text" name="bot_honey" class="hidden" tabindex="-1" autocomplete="off">
+
+        <!-- 1. 기본 인적사항 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">
+              성함 <span class="text-red-400">*</span>
+            </label>
+            <input type="text" id="name" required placeholder="홍길동"
+                   class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">
+              연락처 <span class="text-red-400">*</span>
+            </label>
+            <input type="tel" id="phone" required placeholder="010-1234-5678"
+                   class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500">
+          </div>
+        </div>
+
+        <!-- 2. 거주 지역 -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">
+            거주 지역 (탁송 및 등록 안내용) <span class="text-red-400">*</span>
+          </label>
+          <select id="region" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-sky-500">
+            <option value="" disabled selected>거주 지역을 선택해 주세요</option>
+            <option value="서울">서울특별시</option>
+            <option value="경기/인천">경기도 / 인천광역시</option>
+            <option value="충청/대전/세종">충청도 / 대전 / 세종</option>
+            <option value="경상/부산/대구/울산">경상도 / 부산 / 대구 / 울산</option>
+            <option value="전라/광주">전라도 / 광주광역시</option>
+            <option value="강원">강원도</option>
+            <option value="제주/기타">제주도 및 도서지역</option>
+          </select>
+        </div>
+
+        <!-- 3. 관심 차량 (브랜드 & 모델명) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">
+              제조사 브랜드 <span class="text-red-400">*</span>
+            </label>
+            <select id="brand" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-sky-500">
+              <option value="혼다(Honda)">혼다 (Honda)</option>
+              <option value="야마하(Yamaha)">야마하 (Yamaha)</option>
+              <option value="스즈키(Suzuki)">스즈키 (Suzuki)</option>
+              <option value="가와사키(Kawasaki)">가와사키 (Kawasaki)</option>
+              <option value="BMW">BMW Motorrad</option>
+              <option value="할리데이비슨">할리데이비슨</option>
+              <option value="베스파/피아지오">베스파 / 피아지오</option>
+              <option value="기타/직접입력">기타 브랜드</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">
+              희망 모델명 & 색상 <span class="text-red-400">*</span>
+            </label>
+            <input type="text" id="model" required placeholder="예: 포르자 350 블랙 / 슈퍼커브"
+                   class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500">
+          </div>
+        </div>
+
+        <!-- 4. 차량 상태 (신차/중고) -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-2">
+            차량 구분 <span class="text-red-400">*</span>
+          </label>
+          <div class="grid grid-cols-3 gap-2 radio-pill">
+            <div>
+              <input type="radio" name="condition" id="cond_new" value="신차" checked class="hidden">
+              <label for="cond_new" class="block text-center py-2.5 px-3 rounded-lg border border-slate-700 text-xs sm:text-sm text-slate-300 cursor-pointer transition">
+                신차 출고
+              </label>
+            </div>
+            <div>
+              <input type="radio" name="condition" id="cond_used" value="중고차" class="hidden">
+              <label for="cond_used" class="block text-center py-2.5 px-3 rounded-lg border border-slate-700 text-xs sm:text-sm text-slate-300 cursor-pointer transition">
+                검증 중고차
+              </label>
+            </div>
+            <div>
+              <input type="radio" name="condition" id="cond_any" value="무관(빠른출고 우선)" class="hidden">
+              <label for="cond_any" class="block text-center py-2.5 px-3 rounded-lg border border-slate-700 text-xs sm:text-sm text-slate-300 cursor-pointer transition">
+                상관없음
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. 출고 희망 시기 (긴급도 파악) -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-2">
+            출고 희망 시기 <span class="text-red-400">*</span>
+          </label>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 radio-pill">
+            <div>
+              <input type="radio" name="urgency" id="urg_now" value="즉시 출고 희망 (재고시 바로 계약)" checked class="hidden">
+              <label for="urg_now" class="block text-center py-2.5 px-2 rounded-lg border border-slate-700 text-xs text-slate-300 cursor-pointer transition">
+                <span class="text-red-400 font-bold block">🔥 즉시 출고</span>
+                재고 시 바로계약
+              </label>
+            </div>
+            <div>
+              <input type="radio" name="urgency" id="urg_2w" value="1~2주 이내 출고 희망" class="hidden">
+              <label for="urg_2w" class="block text-center py-2.5 px-2 rounded-lg border border-slate-700 text-xs text-slate-300 cursor-pointer transition">
+                <span class="font-semibold block">1~2주 이내</span>
+                빠른 일정
+              </label>
+            </div>
+            <div>
+              <input type="radio" name="urgency" id="urg_1m" value="1개월 이내" class="hidden">
+              <label for="urg_1m" class="block text-center py-2.5 px-2 rounded-lg border border-slate-700 text-xs text-slate-300 cursor-pointer transition">
+                <span class="font-semibold block">1개월 이내</span>
+                여유 있게
+              </label>
+            </div>
+            <div>
+              <input type="radio" name="urgency" id="urg_info" value="단순 시세 및 재고 확인" class="hidden">
+              <label for="urg_info" class="block text-center py-2.5 px-2 rounded-lg border border-slate-700 text-xs text-slate-300 cursor-pointer transition">
+                <span class="font-semibold block">시세/재고 확인</span>
+                사전 견적
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. 결제 방식 & 대차 여부 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">
+              희망 결제 방식 <span class="text-red-400">*</span>
+            </label>
+            <select id="payment_method" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-sky-500">
+              <option value="현금 일시불 / 계좌이체">현금 일시불 / 계좌이체</option>
+              <option value="신용카드 일시불/무이자 할부">신용카드 일시불 / 무이자 할부</option>
+              <option value="파이낸셜/캐피탈 할부 (저금리)">캐피탈 할부 (초기비용 최소화)</option>
+              <option value="상담 후 최적 방식 결정">상담 후 결정</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">
+              기존 바이크 대차(기변) 여부 <span class="text-red-400">*</span>
+            </label>
+            <select id="trade_in" onchange="toggleTradeInInput()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-sky-500">
+              <option value="없음 (순수 신규 구매)">없음 (첫 구매 / 순수 신규)</option>
+              <option value="있음 (기존 바이크 매입/대차 희망)">있음 (기존 차량 매입 대차 희망)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 대차 차량 정보 (조건부 노출) -->
+        <div id="tradeInBox" class="hidden bg-slate-900/80 border border-slate-800 p-3.5 rounded-lg">
+          <label class="block text-xs font-semibold text-sky-400 mb-1">
+            기존 보유 바이크 정보 (차종, 연식, 주행거리 등)
+          </label>
+          <input type="text" id="trade_in_model" placeholder="예: 21년식 PCX 125 (20,000km)"
+                 class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500">
+        </div>
+
+        <!-- 7. 수령 및 통화 편한 시간 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">
+              희망 수령 방식 <span class="text-red-400">*</span>
+            </label>
+            <select id="delivery_method" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-sky-500">
+              <option value="매장 직접 방문 출고">매장 직접 방문 출고</option>
+              <option value="전국 자택 안전 탁송">전국 자택 안전 탁송 (배송)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">
+              상담 편한 시간대 <span class="text-red-400">*</span>
+            </label>
+            <select id="contact_time" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-sky-500">
+              <option value="언제든 가능 (빠를수록 좋음)">언제든 가능 (빠를수록 좋음)</option>
+              <option value="오전 (09:00 ~ 12:00)">오전 (09:00 ~ 12:00)</option>
+              <option value="오후 (12:00 ~ 18:00)">오후 (12:00 ~ 18:00)</option>
+              <option value="저녁 (18:00 ~ 20:00)">저녁 (18:00 ~ 20:00)</option>
+              <option value="문자 / 카카오톡 우선 희망">문자 / 카카오톡 먼저 희망</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 8. 추가 요청사항 -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">
+            장착 희망 옵션 및 추가 문의사항 (선택)
+          </label>
+          <textarea id="message" rows="3" placeholder="예: 2채널 블랙박스 및 탑박스 장착 패키지 견적도 함께 부탁드립니다."
+                    class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 resize-none"></textarea>
+        </div>
+
+        <!-- 개인정보 수집 동의 -->
+        <div class="flex items-start space-x-2 pt-2">
+          <input type="checkbox" id="privacy" required class="mt-1 h-4 w-4 rounded bg-slate-900 border-slate-700 text-sky-500 focus:ring-sky-500">
+          <label for="privacy" class="text-xs text-slate-400 cursor-pointer">
+            <span class="text-slate-300 font-semibold">[필수]</span> 구매 상담 및 견적 안내를 위한 개인정보(성함, 연락처, 희망차종 등) 수집·이용에 동의합니다.
+          </label>
+        </div>
+
+        <!-- 제출 버튼 -->
+        <button type="submit" id="submitBtn"
+                class="w-full bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-slate-950 font-extrabold py-4 px-6 rounded-xl transition duration-200 flex items-center justify-center space-x-2 shadow-xl shadow-sky-500/25">
+          <span id="btnText" class="text-base">오토바이 구매 견적 요청하기</span>
+          <i id="btnIcon" class="fa-solid fa-arrow-right"></i>
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- 푸터 -->
+  <footer class="border-t border-slate-800 py-8 px-4 text-center text-xs text-slate-500 space-y-2">
+    <p>본 사이트는 오토바이 구매 상담 및 견적 안내를 제공하는 직결 랜딩페이지입니다.</p>
+    <p>© MOTO DIRECT. All rights reserved.</p>
+  </footer>
+
+  <!-- 알림 팝업 모달 -->
+  <div id="resultModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+    <div class="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-2xl max-w-sm w-full text-center space-y-4 shadow-2xl">
+      <div id="modalIcon" class="w-14 h-14 mx-auto rounded-full flex items-center justify-center text-2xl"></div>
+      <h3 id="modalTitle" class="text-lg font-bold text-white"></h3>
+      <p id="modalDesc" class="text-xs sm:text-sm text-slate-300 leading-relaxed"></p>
+      <button onclick="closeModal()" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2.5 rounded-lg text-sm transition">
+        확인
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // 전화번호 자동 하이픈 포맷
+    const phoneInput = document.getElementById('phone');
+    phoneInput.addEventListener('input', (e) => {
+      let val = e.target.value.replace(/[^0-9]/g, '');
+      if (val.length > 11) val = val.slice(0, 11);
+      if (val.length > 7) {
+        val = val.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+      } else if (val.length > 3) {
+        val = val.replace(/(\d{3})(\d{1,4})/, '$1-$2');
+      }
+      e.target.value = val;
+    });
+
+    // 대차 차량 입력창 토글
+    function toggleTradeInInput() {
+      const tradeInVal = document.getElementById('trade_in').value;
+      const box = document.getElementById('tradeInBox');
+      if (tradeInVal.includes('있음')) {
+        box.classList.remove('hidden');
+      } else {
+        box.classList.add('hidden');
+      }
+    }
+
+    // 모달 제어
+    const modal = document.getElementById('resultModal');
+    function showModal(isSuccess, title, desc) {
+      const modalIcon = document.getElementById('modalIcon');
+      if (isSuccess) {
+        modalIcon.className = "w-14 h-14 mx-auto rounded-full flex items-center justify-center text-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+        modalIcon.innerHTML = '<i class="fa-solid fa-check"></i>';
+      } else {
+        modalIcon.className = "w-14 h-14 mx-auto rounded-full flex items-center justify-center text-2xl bg-rose-500/20 text-rose-400 border border-rose-500/30";
+        modalIcon.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+      }
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalDesc').textContent = desc;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+    function closeModal() {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    // 폼 제출 이벤트
+    document.getElementById('bikeInquiryForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const submitBtn = document.getElementById('submitBtn');
+      const btnText = document.getElementById('btnText');
+      const btnIcon = document.getElementById('btnIcon');
+
+      // 로딩 상태 변환
+      submitBtn.disabled = true;
+      btnText.textContent = "견적 문의 전송 중...";
+      btnIcon.className = "fa-solid fa-spinner fa-spin";
+
+      const payload = {
+        name: document.getElementById('name').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        region: document.getElementById('region').value,
+        brand: document.getElementById('brand').value,
+        model: document.getElementById('model').value.trim(),
+        condition: document.querySelector('input[name="condition"]:checked').value,
+        urgency: document.querySelector('input[name="urgency"]:checked').value,
+        payment_method: document.getElementById('payment_method').value,
+        trade_in: document.getElementById('trade_in').value,
+        trade_in_model: document.getElementById('trade_in_model').value.trim() || null,
+        delivery_method: document.getElementById('delivery_method').value,
+        contact_time: document.getElementById('contact_time').value,
+        message: document.getElementById('message').value.trim() || null,
+        bot_honey: document.querySelector('input[name="bot_honey"]').value || null
+      };
+
+      try {
+        const res = await fetch('/api/inquiry', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          showModal(true, "문의 접수가 완료되었습니다!", "요청하신 차량 견적과 재고 확인 후 담당자가 신속히 연락드리겠습니다.");
+          document.getElementById('bikeInquiryForm').reset();
+          toggleTradeInInput();
+        } else {
+          showModal(false, "전송 실패", data.detail || "일시적인 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+        }
+      } catch (err) {
+        showModal(false, "통신 오류", "서버와 연결할 수 없습니다. 네트워크 상태를 확인해 주세요.");
+      } finally {
+        submitBtn.disabled = false;
+        btnText.textContent = "오토바이 구매 견적 요청하기";
+        btnIcon.className = "fa-solid fa-arrow-right";
+      }
+    });
+  </script>
+</body>
+</html>
