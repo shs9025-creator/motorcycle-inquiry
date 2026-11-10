@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>구매 문의 관리 대시보드 | MOTO DIRECT</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+    body { font-family: Pretendard, -apple-system, sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen">
+  <!-- 상단 네비게이션 -->
+  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <i class="fa-solid fa-motorcycle text-sky-400 text-2xl"></i>
+        <span class="font-extrabold text-lg text-white">MOTO DIRECT</span>
+        <span class="text-xs bg-sky-950 text-sky-400 border border-sky-800 px-2.5 py-0.5 rounded-full font-semibold">관리자 대시보드</span>
+      </div>
+      <div class="flex items-center space-x-3">
+        <a href="/" target="_blank" class="text-xs text-slate-400 hover:text-white px-3 py-1.5 rounded-lg border border-slate-700 transition">
+          랜딩페이지 보기 <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
+        </a>
+        <button onclick="logout()" class="text-xs bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 px-3 py-1.5 rounded-lg transition font-semibold">
+          로그아웃
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 py-8 space-y-6">
+    <!-- 대시보드 헤더 & 필터 -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900 p-6 rounded-2xl border border-slate-800">
+      <div>
+        <h2 class="text-xl font-extrabold text-white">오토바이 구매 문의 접수 현황</h2>
+        <p class="text-xs text-slate-400 mt-1">Supabase DB 실시간 연동 (총 <span id="totalCount" class="font-bold text-sky-400">0</span>건)</p>
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="filterStatus('전체')" class="filter-btn text-xs px-3 py-1.5 rounded-lg bg-sky-500 text-slate-950 font-bold transition">전체</button>
+        <button onclick="filterStatus('신규접수')" class="filter-btn text-xs px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition">신규접수</button>
+        <button onclick="filterStatus('상담중')" class="filter-btn text-xs px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition">상담중</button>
+        <button onclick="filterStatus('계약완료')" class="filter-btn text-xs px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition">계약완료</button>
+        <button onclick="filterStatus('상담종료')" class="filter-btn text-xs px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition">상담종료</button>
+        <button onclick="fetchInquiries()" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 ml-2 border border-slate-700">
+          <i class="fa-solid fa-arrows-rotate mr-1"></i>새로고침
+        </button>
+      </div>
+    </div>
+
+    <!-- 로딩 스피너 -->
+    <div id="loading" class="text-center py-12">
+      <i class="fa-solid fa-spinner fa-spin text-3xl text-sky-400"></i>
+      <p class="text-xs text-slate-400 mt-2">문의 내역을 불러오는 중...</p>
+    </div>
+
+    <!-- 문의 테이블 목록 -->
+    <div id="tableContainer" class="hidden overflow-x-auto bg-slate-900 border border-slate-800 rounded-2xl shadow-xl">
+      <table class="w-full text-left text-sm text-slate-300">
+        <thead class="bg-slate-950/80 text-xs text-slate-400 uppercase border-b border-slate-800">
+          <tr>
+            <th class="py-3.5 px-4">접수일시</th>
+            <th class="py-3.5 px-4">고객정보</th>
+            <th class="py-3.5 px-4">희망차종</th>
+            <th class="py-3.5 px-4">출고시기 / 결제</th>
+            <th class="py-3.5 px-4">대차 / 메모</th>
+            <th class="py-3.5 px-4">처리상태</th>
+            <th class="py-3.5 px-4">빠른 연락</th>
+          </tr>
+        </thead>
+        <tbody id="inquiryList" class="divide-y divide-slate-800">
+        </tbody>
+      </table>
+    </div>
+
+    <div id="emptyNotice" class="hidden text-center py-16 bg-slate-900 rounded-2xl border border-slate-800">
+      <i class="fa-regular fa-folder-open text-4xl text-slate-600 mb-2"></i>
+      <p class="text-sm text-slate-400">접수된 문의 내역이 없습니다.</p>
+    </div>
+  </main>
+
+  <script>
+    const token = localStorage.getItem('admin_token');
+    if (!token) {
+      window.location.href = '/login.html';
+    }
+
+    let allInquiries = [];
+    let currentFilter = '전체';
+
+    function logout() {
+      localStorage.removeItem('admin_token');
+      window.location.href = '/login.html';
+    }
+
+    async function fetchInquiries() {
+      document.getElementById('loading').classList.remove('hidden');
+      document.getElementById('tableContainer').classList.add('hidden');
+      document.getElementById('emptyNotice').classList.add('hidden');
+
+      try {
+        const res = await fetch('/api/admin/inquiries', {
+          headers: { 'X-Admin-Token': token }
+        });
+        if (res.status === 401) {
+          logout();
+          return;
+        }
+        allInquiries = await res.json();
+        renderTable();
+      } catch (err) {
+        alert('문의 데이터를 불러오지 못했습니다.');
+      } finally {
+        document.getElementById('loading').classList.add('hidden');
+      }
+    }
+
+    function filterStatus(status) {
+      currentFilter = status;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        if (btn.textContent === status) {
+          btn.className = 'filter-btn text-xs px-3 py-1.5 rounded-lg bg-sky-500 text-slate-950 font-bold transition';
+        } else {
+          btn.className = 'filter-btn text-xs px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition';
+        }
+      });
+      renderTable();
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('inquiryList');
+      tbody.innerHTML = '';
+
+      const filtered = currentFilter === '전체' 
+        ? allInquiries 
+        : allInquiries.filter(item => item.status === currentFilter);
+
+      document.getElementById('totalCount').textContent = allInquiries.length;
+
+      if (filtered.length === 0) {
+        document.getElementById('emptyNotice').classList.remove('hidden');
+        document.getElementById('tableContainer').classList.add('hidden');
+        return;
+      }
+
+      document.getElementById('emptyNotice').classList.add('hidden');
+      document.getElementById('tableContainer').classList.remove('hidden');
+
+      filtered.forEach(item => {
+        const dateStr = item.created_at ? new Date(item.created_at).toLocaleString('ko-KR', {
+          month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'
+        }) : '-';
+
+        const isUrgent = item.urgency && item.urgency.includes('즉시');
+
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-800/40 transition";
+        tr.innerHTML = `
+          <td class="py-4 px-4 text-xs text-slate-400 whitespace-nowrap">
+            ${dateStr}
+          </td>
+          <td class="py-4 px-4">
+            <div class="font-bold text-white text-sm">${item.name}</div>
+            <div class="text-xs text-slate-400">${item.region || '-'} · ${item.contact_time || ''}</div>
+          </td>
+          <td class="py-4 px-4">
+            <div class="font-semibold text-sky-400 text-sm">${item.brand}</div>
+            <div class="text-xs text-white">${item.model} <span class="text-slate-400">(${item.condition})</span></div>
+          </td>
+          <td class="py-4 px-4 text-xs">
+            <div class="${isUrgent ? 'text-red-400 font-bold' : 'text-slate-300'}">${item.urgency}</div>
+            <div class="text-slate-400">${item.payment_method}</div>
+          </td>
+          <td class="py-4 px-4 text-xs max-w-xs">
+            ${item.trade_in && item.trade_in.includes('있음') ? `<div class="text-amber-400 font-semibold">[대차] ${item.trade_in_model || '기종미기재'}</div>` : '<div class="text-slate-500">대차없음</div>'}
+            <div class="text-slate-400 truncate mt-1" title="${item.message || ''}">${item.message || '요청사항 없음'}</div>
+          </td>
+          <td class="py-4 px-4">
+            <select onchange="changeStatus(${item.id}, this.value)" class="bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-white focus:outline-none focus:border-sky-500">
+              <option value="신규접수" ${item.status === '신규접수' ? 'selected' : ''}>신규접수</option>
+              <option value="상담중" ${item.status === '상담중' ? 'selected' : ''}>상담중</option>
+              <option value="계약완료" ${item.status === '계약완료' ? 'selected' : ''}>계약완료</option>
+              <option value="상담종료" ${item.status === '상담종료' ? 'selected' : ''}>상담종료</option>
+            </select>
+          </td>
+          <td class="py-4 px-4 whitespace-nowrap">
+            <a href="tel:${item.phone}" class="inline-flex items-center gap-1.5 bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 border border-sky-500/30 px-3 py-1.5 rounded-lg text-xs font-bold transition">
+              <i class="fa-solid fa-phone"></i> ${item.phone}
+            </a>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function changeStatus(id, newStatus) {
+      try {
+        const res = await fetch(`/api/admin/inquiries/${id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Admin-Token': token
+          },
+          body: JSON.stringify({ status: newStatus })
+        });
+        if (res.ok) {
+          const item = allInquiries.find(i => i.id === id);
+          if (item) item.status = newStatus;
+          renderTable();
+        } else {
+          alert('상태 업데이트에 실패했습니다.');
+        }
+      } catch (err) {
+        alert('서버 통신 오류가 발생했습니다.');
+      }
+    }
+
+    fetchInquiries();
+  </script>
+</body>
+</html>
